@@ -4,17 +4,12 @@
 
     <sitemap>
         <loc>https://dusign.net/post-sitemap.xml</loc>
-        <lastmod>2019-12-20T11:21:47.685Z</lastmod>
+        <lastmod>2019-12-20T14:33:41.719Z</lastmod>
     </sitemap>
 
     <sitemap>
         <loc>https://dusign.net/page-sitemap.xml</loc>
         <lastmod>2019-12-20T11:21:47.790Z</lastmod>
-    </sitemap>
-
-    <sitemap>
-        <loc>https://dusign.net/tag-sitemap.xml</loc>
-        <lastmod>2019-12-20T11:21:47.685Z</lastmod>
     </sitemap>
 
 </sitemapindex>

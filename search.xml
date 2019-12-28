@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>go笔记 平台之间的交叉编译</title>
+      <link href="/2019/12/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/"/>
+      <url>/2019/12/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/</url>
+      
+        <content type="html"><![CDATA[<p>mac编译 linux, window64位 可执行程序<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=linux GOARCH=amd64 go build main.go</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=windows GOARCH=amd64 go build main.go</span><br></pre></td></tr></table></figure><br>linux编译 mac, windows64位 可执行程序<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=darwin GOARCH=amd64 go build main.go</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=windows GOARCH=amd64 go build main.go</span><br></pre></td></tr></table></figure></p><p>windows编译 Mac, Linux64位可执行程序<br>```php<br>SET CGO_ENABLED=0<br>SET GOOS=darwin<br>SET GOARCH=amd64<br>go build main.go</p><p>SET CGO_ENABLED=0<br>SET GOOS=linux<br>SET GOARCH=amd64<br>go build main.go</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>php实现检测域名是否被墙</title>
       <link href="/2019/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/"/>
       <url>/2019/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/</url>

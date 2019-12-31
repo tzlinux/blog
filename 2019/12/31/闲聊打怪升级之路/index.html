@@ -16,11 +16,11 @@
     <!--<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>-->
     <title>
         
-          php实现检测域名是否被墙 - shudun
+          闲聊打怪升级之路 - shudun
         
     </title>
 
-    <link rel="canonical" href="https://dusign.net/2019/12/24/php实现检测域名是否被墙/">
+    <link rel="canonical" href="https://dusign.net/2019/12/31/闲聊打怪升级之路/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -110,17 +110,17 @@
                         <div class="tags">
                             
                         </div>
-                        <h1>php实现检测域名是否被墙</h1>
+                        <h1>闲聊打怪升级之路</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by shudun on
-                            2019-12-24
+                            2019-12-31
                         </span>
 
                         
                             <div class="blank_box"></div>
                             <span class="meta">
-                                Words <span class="post-count">333</span> and
+                                Words <span class="post-count">288</span> and
                                 Reading Time <span class="post-count">1</span> Minutes
                             </span>
                             <div class="blank_box"></div>
@@ -256,25 +256,19 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>首先准备两台服务器,普通服务器一台, 能科学上网服务器一台.<br>本人环境 php version 7.2  mysql5.7</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">大概思路:境内主要发起http请求，如果响应失败，则尝试到境外服务器请求</span><br></pre></td></tr></table></figure>
-<p>存储结构<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SET NAMES utf8mb4;</span><br><span class="line">SET FOREIGN_KEY_CHECKS = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">DROP TABLE <span class="keyword">IF</span> EXISTS `tbl_url`;</span><br><span class="line">CREATE TABLE `tbl_url` (</span><br><span class="line">  `id` int(<span class="number">11</span>) NOT <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `in` tinyint(<span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `out` tinyint(<span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `note` varchar(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `url` varchar(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `created_at` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `updated_at` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=<span class="number">13</span> <span class="keyword">DEFAULT</span> CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">SET FOREIGN_KEY_CHECKS = <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
-<p>普通服务器代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    $pdo = <span class="keyword">new</span> PDO(</span><br><span class="line">        <span class="string">'mysql:dbname=dbname;host=127.0.0.1;charset=UTF8'</span>, <span class="string">'username'</span>, <span class="string">'password'</span></span><br><span class="line">    );</span><br><span class="line">&#125; <span class="keyword">catch</span> ( <span class="keyword">Exception</span> $ex ) &#123;</span><br><span class="line">    <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$update = <span class="function"><span class="keyword">function</span><span class="params">( $in, $out )</span> <span class="title">use</span> <span class="params">( $pdo, &amp;$id )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> === $pdo-&gt;exec( sprintf(</span><br><span class="line">            <span class="string">'UPDATE `tbl_url` SET `in` = %d, `out` = %d, `updated_at` = NOW() WHERE `id` = %d LIMIT 1'</span>, $in, $out, $id</span><br><span class="line">        ) );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">curl_setopt_array( $ch = curl_init(), [</span><br><span class="line">    CURLOPT_RETURNTRANSFER  =&gt;  <span class="keyword">true</span>,</span><br><span class="line">    CURLOPT_TIMEOUT         =&gt;  <span class="number">5</span>,</span><br><span class="line">]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span>( $pdo-&gt;query(</span><br><span class="line">    <span class="string">'SELECT `id`, `url` FROM `tbl_url` WHERE 1'</span></span><br><span class="line">)-&gt;fetchAll( PDO::FETCH_KEY_PAIR ) <span class="keyword">as</span> $id =&gt; $url ) &#123;</span><br><span class="line"></span><br><span class="line">    curl_setopt( $ch, CURLOPT_URL, <span class="string">'http://科学上网服务器地址/?url='</span> . base64_encode( $url ) );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span>( curl_exec( $ch ) ) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span> :</span><br><span class="line">            $update( <span class="number">0</span>, <span class="number">1</span> );</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span> :</span><br><span class="line">            fsockopen( $url, <span class="number">80</span>, $en, $es, <span class="number">4</span> ) ?</span><br><span class="line">                $update( <span class="number">2</span>, <span class="number">2</span> ) : $update( <span class="number">1</span>, <span class="number">2</span> );</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">default</span> :</span><br><span class="line">            $update( <span class="number">0</span>, <span class="number">0</span> );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">curl_close( $ch );</span><br></pre></td></tr></table></figure></p>
-<p>能科学上网的服务器代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">error_reporting(<span class="number">0</span>);  <span class="comment">//这句必须加上, 因为fsockopen打不开的时候会返回warning。这是个api所以要保持数据能正确返回2或者1</span></span><br><span class="line"><span class="keyword">echo</span> fsockopen( base64_decode( $_GET[<span class="string">'url'</span>] ), <span class="number">80</span>, $en, $es, <span class="number">4</span> ) ? <span class="number">2</span> : <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://blog-image-1255951271.cos.ap-beijing.myqcloud.com/WX20191217-143917%402x.png" alt="linear-gradient(90deg, red 25%, yellow 37%, red 63%)"></p>
+                <p>比如翻文档的时候, 你遇到了这个数组array_walk？what ?这是干啥的。 然后本着不弄明白不回头的心情点开进去看了下介绍如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">array_walk ( <span class="keyword">array</span> &amp;$array , callable $callback [, mixed $userdata = <span class="keyword">NULL</span> ] ) : bool</span><br><span class="line">将用户自定义函数 funcname 应用到 <span class="keyword">array</span> 数组中的每个单元。</span><br><span class="line"></span><br><span class="line">array_walk() 不会受到 <span class="keyword">array</span> 内部数组指针的影响。array_walk() 会遍历整个数组而不管指针的位置。</span><br></pre></td></tr></table></figure><br>哦，callable? callable是啥， 于是乎跳转链接google回调函数-&gt;搜到了匿名函数, 匿名函数是啥？ 跳回了手册 搜索匿名函数。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">匿名函数（Anonymous functions，也叫闭包函数（closures），允许 临时创建一个没有指定名称的函数。最经常用作回调函数（callback）参数的值。当然，也有其它应用的情况。</span><br><span class="line"></span><br><span class="line">匿名函数目前是通过 Closure 类来实现的。</span><br></pre></td></tr></table></figure><br>哦，闭包函数? 闭包函数是啥, 于是乎继续往下翻, 这时候忽然又发现了个叫协程的好玩意。 听起来就有难度有信心 </p>
+<p>最后…协程是什么, 怎么怎么还推荐我swoole框架。 </p>
+<p>shit </p>
+<p><img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2892676305,1854844533&amp;fm=26&amp;gp=0.jpg" alt="linear-gradient(90deg, red 25%, yellow 37%, red 63%)"></p>
 
                 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2019/12/28/go笔记-平台之间的交叉编译-1/" data-toggle="tooltip" data-placement="top" title="go笔记 平台之间的交叉编译">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2019/12/20/mysql远程登录/" data-toggle="tooltip" data-placement="top" title="mysql远程登录">Next Post &rarr;</a>
+                        <a href="/2019/12/30/玩玩截取查找字符串/" data-toggle="tooltip" data-placement="top" title="玩玩截取查找字符串">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

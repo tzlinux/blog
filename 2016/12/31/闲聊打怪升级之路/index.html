@@ -16,11 +16,11 @@
     <!--<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>-->
     <title>
         
-          php实现异步调用 - shudun
+          闲聊打怪升级之路 - shudun
         
     </title>
 
-    <link rel="canonical" href="https://dusign.net/2015/01/01/php实现异步调用/">
+    <link rel="canonical" href="https://dusign.net/2016/12/31/闲聊打怪升级之路/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -110,17 +110,17 @@
                         <div class="tags">
                             
                         </div>
-                        <h1>php实现异步调用</h1>
+                        <h1>闲聊打怪升级之路</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by shudun on
-                            2015-01-01
+                            2016-12-31
                         </span>
 
                         
                             <div class="blank_box"></div>
                             <span class="meta">
-                                Words <span class="post-count">145</span> and
+                                Words <span class="post-count">287</span> and
                                 Reading Time <span class="post-count">1</span> Minutes
                             </span>
                             <div class="blank_box"></div>
@@ -256,7 +256,9 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ignore_user_abort(<span class="keyword">true</span>); <span class="comment">//[客户端断开连接，是否中断脚本](https://www.php.net/manual/zh/function.ignore-user-abort.php)</span></span><br><span class="line">set_time_limit(<span class="number">0</span>); <span class="comment">//[脚本执行时间没有限制](https://www.php.net/manual/zh/function.set-time-limit.php)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">asynRequest</span><span class="params">($url)</span> </span>&#123;</span><br><span class="line">      </span><br><span class="line">        $fp = fsockopen($url, <span class="number">80</span>, $errno, $errstr, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">false</span> === $fp) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"连接失败"</span>;</span><br><span class="line">            <span class="keyword">die</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        $out  = <span class="string">"GET /api.php?age=8&amp;name=getin HTTP/1.1 \r\n"</span>;</span><br><span class="line">        $out .= <span class="string">"Host: "</span>. $url . <span class="string">"\r\n"</span>;</span><br><span class="line">        $out .= <span class="string">"Connection:Close \r\n\r\n"</span>;</span><br><span class="line">    </span><br><span class="line">        fwrite($fp, $out);</span><br><span class="line">        <span class="comment">//echo fread($fp, 1024);</span></span><br><span class="line">        fclose($fp);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">asynRequest(<span class="string">"www.doman.com"</span>); <span class="comment">//程序执行到这里的时候, 不会等待www.doman.com/api.php的返回结果，而是跳过等待。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="number">1</span>; <span class="comment">//</span></span><br></pre></td></tr></table></figure>
+                <p>比如翻文档的时候, 你遇到了这个数组array_walk？what ?这是干啥的。 然后本着不弄明白不回头的心情点开进去看了下介绍如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">array_walk ( <span class="keyword">array</span> &amp;$array , callable $callback [, mixed $userdata = <span class="keyword">NULL</span> ] ) : bool</span><br><span class="line">将用户自定义函数 funcname 应用到 <span class="keyword">array</span> 数组中的每个单元。</span><br><span class="line"></span><br><span class="line">array_walk() 不会受到 <span class="keyword">array</span> 内部数组指针的影响。array_walk() 会遍历整个数组而不管指针的位置。</span><br></pre></td></tr></table></figure><br>哦，callable? callable是啥， 于是乎跳转链接google回调函数-&gt;搜到了匿名函数, 匿名函数是啥？ 跳回了手册 搜索匿名函数。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">匿名函数（Anonymous functions，也叫闭包函数（closures），允许 临时创建一个没有指定名称的函数。最经常用作回调函数（callback）参数的值。当然，也有其它应用的情况。</span><br><span class="line"></span><br><span class="line">匿名函数目前是通过 Closure 类来实现的。</span><br></pre></td></tr></table></figure><br>哦，闭包函数? 闭包函数是啥, 于是乎继续往下翻, 这时候忽然又发现了个叫协程的好玩意。 听起来就有难度有信心 </p>
+<p>最后…协程是什么, 怎么怎么还推荐我swoole框架。 </p>
+<p><img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2892676305,1854844533&amp;fm=26&amp;gp=0.jpg" alt="linear-gradient(50deg, red 25%, yellow 37%, red 63%)"></p>
 
                 
                 <hr>
@@ -264,9 +266,13 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/12/20/mysql远程登录/" data-toggle="tooltip" data-placement="top" title="mysql远程登录">&larr; Previous Post</a>
+                        <a href="/2017/12/30/玩玩截取查找字符串/" data-toggle="tooltip" data-placement="top" title="玩玩截取查找字符串">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2016/09/20/php实现异步调用/" data-toggle="tooltip" data-placement="top" title="php实现异步调用">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -509,11 +515,28 @@
         
 
         
-            <script type="text/javascript" src="/js/mouse-click.js" content='[&#34;🌱&#34;,&#34;just do it&#34;,&#34;🌾&#34;,&#34;🍀&#34;,&#34;don&#39;t give up&#34;,&#34;🍂&#34;,&#34;🌻&#34;,&#34;try it again&#34;,&#34;🍃&#34;,&#34;never say die&#34;,&#34;🌵&#34;,&#34;🌿&#34;,&#34;🌴&#34;]' color='[&#34;rgb(121,93,179)&#34; ,&#34;rgb(76,180,231)&#34; ,&#34;rgb(184,90,154)&#34; ,&#34;rgb(157,211,250)&#34; ,&#34;rgb(255,0,0)&#34; ,&#34;rgb(242,153,29)&#34; ,&#34;rgb(23,204,16)&#34; ,&#34;rgb(222,0,0)&#34; ,&#34;rgb(22,36,92)&#34; ,&#34;rgb(127,24,116)&#34; ,&#34;rgb(119,195,79)&#34; ,&#34;rgb(4,77,34)&#34; ,&#34;rgb(122,2,60)&#34;]'></script>
+            <script type="text/javascript" src="/js/mouse-click.js" content='[&quot;🌱&quot;,&quot;just do it&quot;,&quot;🌾&quot;,&quot;🍀&quot;,&quot;don&#39;t give up&quot;,&quot;🍂&quot;,&quot;🌻&quot;,&quot;try it again&quot;,&quot;🍃&quot;,&quot;never say die&quot;,&quot;🌵&quot;,&quot;🌿&quot;,&quot;🌴&quot;]' color='[&quot;rgb(121,93,179)&quot; ,&quot;rgb(76,180,231)&quot; ,&quot;rgb(184,90,154)&quot; ,&quot;rgb(157,211,250)&quot; ,&quot;rgb(255,0,0)&quot; ,&quot;rgb(242,153,29)&quot; ,&quot;rgb(23,204,16)&quot; ,&quot;rgb(222,0,0)&quot; ,&quot;rgb(22,36,92)&quot; ,&quot;rgb(127,24,116)&quot; ,&quot;rgb(119,195,79)&quot; ,&quot;rgb(4,77,34)&quot; ,&quot;rgb(122,2,60)&quot;]'></script>
         
 
         <!-- background effects end -->
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
 </body>
 

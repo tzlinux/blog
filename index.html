@@ -167,48 +167,6 @@ animate();
       <div class="outer">
         <section id="main">
   
-    <article id="post-微测foreach和array-map的执行速度" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/" class="article-date">
-  <time datetime="2020-01-17T10:00:27.000Z" itemprop="datePublished">2020-01-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/">微测foreach和array_map的执行速度</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>之前一直好奇一个问题, `foreach` 和 `array_ma` 谁的执行速度比较快?
-</code></pre><p>今天闲的蛋疼, 写了个小demo test</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$data = [</span><br><span class="line">	[<span class="string">'name'</span> =&gt; <span class="string">'salina'</span>, <span class="string">'age'</span> =&gt; <span class="number">16</span>, <span class="string">'sex'</span> =&gt; <span class="number">0</span>, <span class="string">'status'</span> =&gt; <span class="number">0</span>],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">ini_set(<span class="string">'memory_limit'</span>, <span class="string">'-1'</span>);</span><br><span class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">9999999</span>; $i++) &#123;</span><br><span class="line">	array_push($data, [<span class="string">'name'</span> =&gt; <span class="string">'liya'</span> . $i, <span class="string">'age'</span> =&gt; <span class="number">22</span>, <span class="string">'sex'</span> =&gt; <span class="number">0</span>, <span class="string">'status'</span> =&gt;<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$begin = microtime(<span class="keyword">true</span>);</span><br><span class="line">$data = array_map(<span class="function"><span class="keyword">function</span><span class="params">($v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'status'</span>] === <span class="number">1</span>) &#123; <span class="comment">//一些简单的转换</span></span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'激活'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'禁用'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'sex'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'男'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'女'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> $v;</span><br><span class="line">&#125;, $data);</span><br><span class="line">$end = microtime(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">$min = microtime(<span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> $k =&gt; &amp;$v) &#123;</span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'status'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'激活'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'禁用'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'sex'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'男'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'女'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$max = microtime(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'array_map time: '</span> . ($end - $begin) . PHP_EOL;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'foreach time: '</span> . ($max - $min) . PHP_EOL;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>执行几次测试结果:<br><code>array_map time: 5.3077862262726</code><br><code>foreach time: 2.8736588954926</code><br>——————————————————-华丽的分割线<br><code>array_map time: 8.4756429195404</code><br><code>foreach time: 12.029865980148</code><br>——————————————————-华丽的分割线2<br><code>array_map time: 5.2941391468048</code><br><code>foreach time: 2.8984580039978</code><br>——————————————————-华丽的分割线3<br><code>array_map time: 5.5151488780975</code><br><code>foreach time: 7.3730530738831</code><br>——————————————————-华丽的分割线4<br><code>array_map time: 5.3060140609741</code><br><code>foreach time: 2.8992168903351</code><br>——————————————————-华丽的分割线5<br><code>array_map time: 5.3467030525208
-foreach time: 5.5229871273041</code><br>——————————————————-华丽的分割线6</p>
-<p>结局并不是很理想…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.baidu.com/2020/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/" data-id="ck5i0aniv0000eq5k3yrl9i31" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-go笔记-平台之间的交叉编译-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/02/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/" class="article-date">
@@ -369,6 +327,47 @@ foreach time: 5.5229871273041</code><br>—————————————�
 
 
   
+    <article id="post-微测foreach和array-map的执行速度" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/" class="article-date">
+  <time datetime="2017-01-17T10:00:27.000Z" itemprop="datePublished">2017-01-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/">微测foreach和array_map的执行速度</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>之前一直好奇一个问题, `foreach` 和 `array_ma` 谁的执行速度比较快?
+</code></pre><p>今天闲的蛋疼, 写了个小demo test</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$data = [</span><br><span class="line">	[<span class="string">'name'</span> =&gt; <span class="string">'salina'</span>, <span class="string">'age'</span> =&gt; <span class="number">16</span>, <span class="string">'sex'</span> =&gt; <span class="number">0</span>, <span class="string">'status'</span> =&gt; <span class="number">0</span>],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">ini_set(<span class="string">'memory_limit'</span>, <span class="string">'-1'</span>);</span><br><span class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">9999999</span>; $i++) &#123;</span><br><span class="line">	array_push($data, [<span class="string">'name'</span> =&gt; <span class="string">'liya'</span> . $i, <span class="string">'age'</span> =&gt; <span class="number">22</span>, <span class="string">'sex'</span> =&gt; <span class="number">0</span>, <span class="string">'status'</span> =&gt;<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$begin = microtime(<span class="keyword">true</span>);</span><br><span class="line">$data = array_map(<span class="function"><span class="keyword">function</span><span class="params">($v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'status'</span>] === <span class="number">1</span>) &#123; <span class="comment">//一些简单的转换</span></span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'激活'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'禁用'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'sex'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'男'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'女'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> $v;</span><br><span class="line">&#125;, $data);</span><br><span class="line">$end = microtime(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">$min = microtime(<span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> $k =&gt; &amp;$v) &#123;</span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'status'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'激活'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'status'</span>] = <span class="string">'禁用'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($v[<span class="string">'sex'</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'男'</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$v[<span class="string">'sex'</span>] = <span class="string">'女'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$max = microtime(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'array_map time: '</span> . ($end - $begin) . PHP_EOL;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'foreach time: '</span> . ($max - $min) . PHP_EOL;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>执行几次测试结果:<br><code>array_map time: 5.3077862262726</code><br><code>foreach time: 2.8736588954926</code><br>——————————————————-华丽的分割线<br><code>array_map time: 8.4756429195404</code><br><code>foreach time: 12.029865980148</code><br>——————————————————-华丽的分割线2<br><code>array_map time: 5.2941391468048</code><br><code>foreach time: 2.8984580039978</code><br>——————————————————-华丽的分割线3<br><code>array_map time: 5.5151488780975</code><br><code>foreach time: 7.3730530738831</code><br>——————————————————-华丽的分割线4<br><code>array_map time: 5.3060140609741</code><br><code>foreach time: 2.8992168903351</code><br>——————————————————-华丽的分割线5<br><code>array_map time: 5.3467030525208</code><br><code>foreach time: 5.5229871273041</code><br>——————————————————-华丽的分割线6</p>
+<p>结局并不是很理想…</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.baidu.com/2017/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/" data-id="ck5i0aniv0000eq5k3yrl9i31" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-闲聊打怪升级之路" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/12/31/%E9%97%B2%E8%81%8A%E6%89%93%E6%80%AA%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/" class="article-date">
@@ -469,7 +468,7 @@ $ nc 44.56.34.33 3306</code></p>
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li></ul>
     </div>
   </div>
 
@@ -480,10 +479,6 @@ $ nc 44.56.34.33 3306</code></p>
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2020/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/">微测foreach和array_map的执行速度</a>
-          </li>
         
           <li>
             <a href="/2019/02/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/">go笔记 平台之间的交叉编译</a>
@@ -499,6 +494,10 @@ $ nc 44.56.34.33 3306</code></p>
         
           <li>
             <a href="/2017/12/30/%E7%8E%A9%E7%8E%A9%E6%88%AA%E5%8F%96%E6%9F%A5%E6%89%BE%E5%AD%97%E7%AC%A6%E4%B8%B2/">玩玩截取查找字符串</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/17/%E5%BE%AE%E6%B5%8Bforeach%E5%92%8Carray-map%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%9F%E5%BA%A6/">微测foreach和array_map的执行速度</a>
           </li>
         
       </ul>

@@ -167,47 +167,6 @@ animate();
       <div class="outer">
         <section id="main">
   
-    <article id="post-使用redis-set集合实现牛牛" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/01/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/" class="article-date">
-  <time datetime="2020-01-19T08:48:28.000Z" itemprop="datePublished">2020-01-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/">使用redis set集合实现牛牛</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">webPuke</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	$redis = <span class="keyword">new</span> Redis();</span><br><span class="line"></span><br><span class="line">	$redis-&gt;connect(<span class="string">'127.0.0.1'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里c d h s分别代表 黑桃几，红桃几，方块几，梅花几</span></span><br><span class="line">	$redis-&gt;sadd(<span class="string">'deck'</span>, <span class="string">'CA'</span>, <span class="string">'C2'</span>, <span class="string">'C3'</span>, <span class="string">'C4'</span>, <span class="string">'C5'</span>, <span class="string">'C6'</span>, <span class="string">'C7'</span>, <span class="string">'C8'</span>, <span class="string">'C9'</span>, <span class="string">'C10'</span>, <span class="string">'CJ'</span>, <span class="string">'CQ'</span>, <span class="string">'CK'</span>, <span class="string">'DA'</span>, <span class="string">'D2'</span>, <span class="string">'D3'</span>, <span class="string">'D4'</span>, <span class="string">'D5'</span>, <span class="string">'D6'</span>, <span class="string">'D7'</span>, <span class="string">'D8'</span>, <span class="string">'D9'</span>, <span class="string">'D10'</span>, <span class="string">'DJ'</span>, <span class="string">'DQ'</span>, <span class="string">'DK'</span>, <span class="string">'HA'</span>, <span class="string">'H2'</span>, <span class="string">'H3'</span>, <span class="string">'H4'</span>, <span class="string">'H5'</span>, <span class="string">'H6'</span>, <span class="string">'H7'</span>, <span class="string">'H8'</span>, <span class="string">'H9'</span>, <span class="string">'H10'</span>, <span class="string">'HJ'</span>, <span class="string">'HQ'</span>, <span class="string">'HK'</span>, <span class="string">'SA'</span>, <span class="string">'S2'</span>, <span class="string">'S3'</span>, <span class="string">'S4'</span>, <span class="string">'S5'</span>, <span class="string">'S6'</span>, <span class="string">'S7'</span>, <span class="string">'S8'</span>, <span class="string">'S9'</span>, <span class="string">'S10'</span>, <span class="string">'SJ'</span>, <span class="string">'SQ'</span>, <span class="string">'SK'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//模拟三个三家玩斗牛</span></span><br><span class="line">	$result = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line">	$result2 = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line">	$result3 = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> $msg1 = <span class="string">"玩家1: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		 <span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> $msg2 = <span class="string">"玩家2: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result2 <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</span><br><span class="line">	<span class="keyword">echo</span> $msg3 = <span class="string">"玩家3: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result3 <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">webPuke();</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;/br&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;a href='./test3.php'&gt;重新发牌&lt;/a&gt;"</span>;</span><br></pre></td></tr></table></figure>
-<p>效果如下:<br>玩家1: H1 D10 HK CQ S2<br>玩家2: DQ D9 S2 D8 C9<br>玩家3: C3 H3 DJ H3 H4 重新发牌</p>
-<p>这里牌的颜色翻译就不写了, 本来打算写完自动算出哪个玩家胜利, </p>
-<p><a href="https://www.cnblogs.com/cnxkey/articles/9175362.html" target="_blank" rel="noopener">参考上篇</a><br><a href="https://www.cnblogs.com/cnxkey/articles/9175368.html" target="_blank" rel="noopener">参考中篇</a><br><a href="https://www.cnblogs.com/cnxkey/articles/9175372.html" target="_blank" rel="noopener">参考下篇</a></p>
-<p>看完以后整个人不是很舒服….</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.baidu.com/2020/01/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/" data-id="ck5ksf7mf0000dg5k668h5hsi" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-go笔记-平台之间的交叉编译-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/02/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/" class="article-date">
@@ -279,6 +238,47 @@ animate();
     </div>
     <footer class="article-footer">
       <a data-url="https://www.baidu.com/2018/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/" data-id="ck4v9trtv0001w25k7fc9ag6a" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用redis-set集合实现牛牛" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/" class="article-date">
+  <time datetime="2018-11-19T08:48:28.000Z" itemprop="datePublished">2018-11-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/">使用redis set集合实现牛牛</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">webPuke</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	$redis = <span class="keyword">new</span> Redis();</span><br><span class="line"></span><br><span class="line">	$redis-&gt;connect(<span class="string">'127.0.0.1'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里c d h s分别代表 黑桃几，红桃几，方块几，梅花几</span></span><br><span class="line">	$redis-&gt;sadd(<span class="string">'deck'</span>, <span class="string">'CA'</span>, <span class="string">'C2'</span>, <span class="string">'C3'</span>, <span class="string">'C4'</span>, <span class="string">'C5'</span>, <span class="string">'C6'</span>, <span class="string">'C7'</span>, <span class="string">'C8'</span>, <span class="string">'C9'</span>, <span class="string">'C10'</span>, <span class="string">'CJ'</span>, <span class="string">'CQ'</span>, <span class="string">'CK'</span>, <span class="string">'DA'</span>, <span class="string">'D2'</span>, <span class="string">'D3'</span>, <span class="string">'D4'</span>, <span class="string">'D5'</span>, <span class="string">'D6'</span>, <span class="string">'D7'</span>, <span class="string">'D8'</span>, <span class="string">'D9'</span>, <span class="string">'D10'</span>, <span class="string">'DJ'</span>, <span class="string">'DQ'</span>, <span class="string">'DK'</span>, <span class="string">'HA'</span>, <span class="string">'H2'</span>, <span class="string">'H3'</span>, <span class="string">'H4'</span>, <span class="string">'H5'</span>, <span class="string">'H6'</span>, <span class="string">'H7'</span>, <span class="string">'H8'</span>, <span class="string">'H9'</span>, <span class="string">'H10'</span>, <span class="string">'HJ'</span>, <span class="string">'HQ'</span>, <span class="string">'HK'</span>, <span class="string">'SA'</span>, <span class="string">'S2'</span>, <span class="string">'S3'</span>, <span class="string">'S4'</span>, <span class="string">'S5'</span>, <span class="string">'S6'</span>, <span class="string">'S7'</span>, <span class="string">'S8'</span>, <span class="string">'S9'</span>, <span class="string">'S10'</span>, <span class="string">'SJ'</span>, <span class="string">'SQ'</span>, <span class="string">'SK'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//模拟三个三家玩斗牛</span></span><br><span class="line">	$result = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line">	$result2 = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line">	$result3 = $redis-&gt;SRANDMEMBER(<span class="string">'deck'</span>, <span class="number">-5</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> $msg1 = <span class="string">"玩家1: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		 <span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> $msg2 = <span class="string">"玩家2: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result2 <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</span><br><span class="line">	<span class="keyword">echo</span> $msg3 = <span class="string">"玩家3: "</span> . PHP_EOL;</span><br><span class="line">	<span class="keyword">foreach</span> ($result3 <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">		<span class="keyword">if</span> ($k &gt; <span class="number">5</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">echo</span> $v . PHP_EOL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">webPuke();</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;/br&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;a href='./test3.php'&gt;重新发牌&lt;/a&gt;"</span>;</span><br></pre></td></tr></table></figure>
+<p>效果如下:<br>玩家1: H1 D10 HK CQ S2<br>玩家2: DQ D9 S2 D8 C9<br>玩家3: C3 H3 DJ H3 H4 重新发牌</p>
+<p>这里牌的颜色翻译就不写了, 本来打算写完自动算出哪个玩家胜利, </p>
+<p><a href="https://www.cnblogs.com/cnxkey/articles/9175362.html" target="_blank" rel="noopener">参考上篇</a><br><a href="https://www.cnblogs.com/cnxkey/articles/9175368.html" target="_blank" rel="noopener">参考中篇</a><br><a href="https://www.cnblogs.com/cnxkey/articles/9175372.html" target="_blank" rel="noopener">参考下篇</a></p>
+<p>看完以后整个人不是很舒服….</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.baidu.com/2018/11/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/" data-id="ck5ksf7mf0000dg5k668h5hsi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -558,7 +558,7 @@ $ nc 44.56.34.33 3306</code></p>
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li></ul>
     </div>
   </div>
 
@@ -571,15 +571,15 @@ $ nc 44.56.34.33 3306</code></p>
       <ul>
         
           <li>
-            <a href="/2020/01/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/">使用redis set集合实现牛牛</a>
-          </li>
-        
-          <li>
             <a href="/2019/02/28/go%E7%AC%94%E8%AE%B0-%E5%B9%B3%E5%8F%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-1/">go笔记 平台之间的交叉编译</a>
           </li>
         
           <li>
             <a href="/2018/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/">php实现检测域名是否被墙</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/">使用redis set集合实现牛牛</a>
           </li>
         
           <li>

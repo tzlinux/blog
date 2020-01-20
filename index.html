@@ -382,7 +382,7 @@ animate();
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/17/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">冒泡排序</a>
+      <a class="article-title" href="/2017/05/17/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">php实现冒泡排序</a>
     </h1>
   
 
@@ -390,7 +390,7 @@ animate();
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>冒泡排序的核心概念, 就是两个相邻的元素进行比较。</p>
+        <p>冒泡排序的概念, 就是相邻的元素进行比较, 条件成立交换位置</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">simpleSort</span><span class="params">(array $data)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//从第一个元素开始比较</span></span><br><span class="line">	<span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $count = count($data); $i++) &#123; </span><br><span class="line">		<span class="comment">//跟相邻的元素比较</span></span><br><span class="line">		<span class="keyword">for</span> ($n = $i + <span class="number">1</span>; $n &lt; $count; $n++) &#123;</span><br><span class="line">			<span class="keyword">if</span> ($data[$i] &lt; $data[$n]) &#123;</span><br><span class="line">				<span class="comment">//满足条件就交换位置</span></span><br><span class="line">				<span class="keyword">list</span>($data[$i], $data[$n]) = [$data[$n], $data[$i]];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> $data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">print_r(simpleSort([<span class="number">1</span>,<span class="number">12</span>,<span class="number">6</span>,<span class="number">33</span>,<span class="number">7</span>,<span class="number">47</span>,<span class="number">66</span>,<span class="number">84</span>,<span class="number">51</span>]));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>运行结果:<br><code>Array
 (

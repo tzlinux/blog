@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.baidu.com/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/</loc>
+    <lastmod>2020-01-28</lastmod>
+  </url>  <url>
     <loc>https://www.baidu.com/2019/04/23/%E4%BD%BF%E7%94%A8socket-%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%81%8A%E5%A4%A9/</loc>
     <lastmod>2020-01-23</lastmod>
   </url>  <url>
@@ -17,9 +20,6 @@
     <lastmod>2020-01-01</lastmod>
   </url>  <url>
     <loc>https://www.baidu.com/2018/10/20/php%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/</loc>
-    <lastmod>2020-01-01</lastmod>
-  </url>  <url>
-    <loc>https://www.baidu.com/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/</loc>
     <lastmod>2020-01-01</lastmod>
   </url>  <url>
     <loc>https://www.baidu.com/2018/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/</loc>

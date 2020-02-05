@@ -245,6 +245,45 @@ animate();
 
 
   
+    <article id="post-使用反射实现依赖注入" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/03/%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" class="article-date">
+  <time datetime="2019-02-03T13:21:43.000Z" itemprop="datePublished">2019-02-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/03/%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">使用反射实现依赖 自动注入</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以laravel框架为例, 很多地方出现如下代码:</p>
+<p>声明个基类, 实例化时, 同时注入AdminUserService类<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $userService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(UserService $userService)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//依赖注入服务</span></span><br><span class="line">        <span class="keyword">$this</span> -&gt; userService = $userService;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>声明UserService类, 同时构造一个run()方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminUserService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"i 'm run func()"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>ok, 前置条件已准备完毕。现在创建个控制器, 继承上面的BaseController来使用依赖<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span> <span class="keyword">extends</span> <span class="title">BaseController</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;userService-&gt;run();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>好了可以使用了, 浏览器输入<a href="http://localhost/user/index" target="_blank" rel="noopener">http://localhost/user/index</a> 就能调用AdminUserService类的run()方法, 这里甚至不需要去实例化BaseController类, </p>
+<h2 id="不需要给构造函数传参-因为框架内部使用了反射-帮你自动实例化对象-自动传参了。"><a href="#不需要给构造函数传参-因为框架内部使用了反射-帮你自动实例化对象-自动传参了。" class="headerlink" title="不需要给构造函数传参, 因为框架内部使用了反射 帮你自动实例化对象, 自动传参了。"></a>不需要给构造函数传参, 因为框架内部使用了<a href="https://www.php.net/manual/en/book.reflection.php" target="_blank" rel="noopener">反射</a> 帮你自动实例化对象, 自动传参了。</h2><p>下面自己实现一个类似的功能, 新建三个类</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.baidu.com/2019/02/03/%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" data-id="ck68vzrn30000cr5k68e45d38" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-php实现检测域名是否被墙" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/" class="article-date">
@@ -540,49 +579,12 @@ animate();
 
 
   
-    <article id="post-mysql远程登录" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/" class="article-date">
-  <time datetime="2016-12-20T14:31:57.000Z" itemprop="datePublished">2016-12-20</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/">mysql远程登录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果设置了mysql的host为%，并且在/etc/my.conf下吧bind=address=120.0.0.1注释了<br>还是登录不了的话 可能是服务器运营商的安全组设置问题</p>
-<p>其实整体思路就是用测试工具连接看是否能连接</p>
-<p>我这里用了nc ip port<br>比如<br><code>php
-$ nc 44.56.34.33 3306</code></p>
-<p>如果提示连接失败就是以上的原因了</p>
-<p><img src="https://sign-super.oss-cn-hangzhou.aliyuncs.com/shudun/shudun.jpg" alt="linear-gradient(10deg, red 25%, yellow 37%, red 63%)"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.baidu.com/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/" data-id="ck4v9trty0003w25k7opf21j4" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/archives/2/">2</a><a class="extend next" rel="next" href="/archives/2/">下一页 &amp;raquo;</a>
+  </nav>
 
 </section>
         
@@ -621,15 +623,15 @@ $ nc 44.56.34.33 3306</code></p>
           </li>
         
           <li>
+            <a href="/2019/02/03/%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">使用反射实现依赖 自动注入</a>
+          </li>
+        
+          <li>
             <a href="/2018/12/24/php%E5%AE%9E%E7%8E%B0%E6%A3%80%E6%B5%8B%E5%9F%9F%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E5%A2%99/">php实现检测域名是否被墙</a>
           </li>
         
           <li>
             <a href="/2018/11/19/%E4%BD%BF%E7%94%A8redis-set%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%89%9B%E7%89%9B/">使用redis set集合实现牛牛</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/20/php%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/">php实现异步调用</a>
           </li>
         
       </ul>

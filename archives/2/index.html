@@ -5,12 +5,12 @@
   
 
   
-  <title>归档: 2019/4 | </title>
+  <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="php mysql">
 <meta property="og:type" content="website">
 <meta property="og:title">
-<meta property="og:url" content="https://www.baidu.com/archives/2019/04/index.html">
+<meta property="og:url" content="https://www.baidu.com/archives/2/index.html">
 <meta property="og:site_name">
 <meta property="og:description" content="php mysql">
 <meta property="og:locale" content="zh_CN">
@@ -167,38 +167,54 @@ animate();
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/04/23/%E4%BD%BF%E7%94%A8socket-%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%81%8A%E5%A4%A9/" class="archive-article-date">
-  <time datetime="2019-04-23T11:16:53.000Z" itemprop="datePublished">4月 23</time>
+    <article id="post-mysql远程登录" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/" class="article-date">
+  <time datetime="2016-12-20T14:31:57.000Z" itemprop="datePublished">2016-12-20</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/%E4%BD%BF%E7%94%A8socket-%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%81%8A%E5%A4%A9/">使用socket, 实现简单的聊天</a>
+      <a class="article-title" href="/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/">mysql远程登录</a>
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果设置了mysql的host为%，并且在/etc/my.conf下吧bind=address=120.0.0.1注释了<br>还是登录不了的话 可能是服务器运营商的安全组设置问题</p>
+<p>其实整体思路就是用测试工具连接看是否能连接</p>
+<p>我这里用了nc ip port<br>比如<br><code>php
+$ nc 44.56.34.33 3306</code></p>
+<p>如果提示连接失败就是以上的原因了</p>
+<p><img src="https://sign-super.oss-cn-hangzhou.aliyuncs.com/shudun/shudun.jpg" alt="linear-gradient(10deg, red 25%, yellow 37%, red 63%)"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.baidu.com/2016/12/20/mysql%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/" data-id="ck4v9trty0003w25k7opf21j4" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
 </article>
-  
-  
-    </div></section>
+
+
   
 
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
         
